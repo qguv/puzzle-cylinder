@@ -81,7 +81,6 @@ class PuzzleCylinder {
         const padding = 4;
 
         for (const [i, ring] of this.rings.entries()) {
-            const i_inv = this.rings.length - i - 1;
             for (const [j, color] of ring.entries()) {
                 if (color === null) {
                     continue;
@@ -89,9 +88,9 @@ class PuzzleCylinder {
 
                 context.fillStyle = color;
                 if (highlight_ring === i) {
-                    context.fillRect(j*tile_width + margin, i_inv*tile_height + margin, tile_width - 2*margin, tile_height - 2*margin);
+                    context.fillRect(j*tile_width + margin, i*tile_height + margin, tile_width - 2*margin, tile_height - 2*margin);
                 } else {
-                    context.fillRect(j*tile_width + padding + margin, i_inv*tile_height + padding + margin, tile_width - 2*padding - 2*margin, tile_height - 2*padding - 2*margin);
+                    context.fillRect(j*tile_width + padding + margin, i*tile_height + padding + margin, tile_width - 2*padding - 2*margin, tile_height - 2*padding - 2*margin);
                 }
             }
         }
@@ -125,4 +124,3 @@ function shuf(a) {
 function mod(n, m) {
     return ((n % m) + m) % m;
 }
-

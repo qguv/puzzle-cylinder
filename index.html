@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="index.js"></script>
+    <script>
+        'use strict';
+
+        function init() {
+            const canvas = document.querySelector('canvas');
+            const rings = document.querySelector('#rings');
+            const ring_size = document.querySelector('#ring-size');
+            const shift_position = document.querySelector('#shift-position');
+            const rotate_ring = document.querySelector('#rotate-ring');
+            const rotate_left = document.querySelector('#rotate-left');
+            const rotate_right = document.querySelector('#rotate-right');
+            const shuffle = document.querySelector('#shuffle');
+
+            let pc;
+            const new_pc = () => {
+                pc = new PuzzleCylinder(+rings.value, +ring_size.value);
+                pc.init();
+                pc.blit(canvas, {highlight_ring: +rotate_ring.value});
+
+                rotate_ring.setAttribute('max', rings.value - 1);
+                shift_position.setAttribute('max', rings.value - 1);
+            };
+            new_pc();
+            rings.addEventListener('change', new_pc);
+            ring_size.addEventListener('change', new_pc);
+
+            rotate_ring.addEventListener('change', () => {
+                pc.blit(canvas, {highlight_ring: +rotate_ring.value});
+            });
+
+            shift_position.addEventListener('change', () => {
+                pc.shift(+shift_position.value);
+                pc.blit(canvas, {highlight_ring: +rotate_ring.value});
+            });
+
+            const rotate = i => () => {
+                pc.rotate(+rotate_ring.value, i);
+                pc.blit(canvas, {highlight_ring: +rotate_ring.value});
+            };
+            rotate_left.addEventListener('click', rotate(1));
+            rotate_right.addEventListener('click', rotate(-1));
+
+            shuffle.addEventListener('click', () => {
+                pc.shuffle();
+                shift_position.value = pc.gap[0];
+                pc.blit(canvas, {highlight_ring: +rotate_ring.value});
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</head>
+<body>
+    <canvas width=600 height=200>
+    </canvas>
+
+    <div>
+        <h2>Puzzle Cylinder</h2>
+
+        <label for="rings">Rings</label>
+        <input id="rings" type="number" value=5 min=1>
+
+        <label for="ring-size">Ring size</label>
+        <input id="ring-size" type="number" value=8 min=1>
+    </div>
+    <div>
+        <h2>Shift</h2>
+
+        <label for="shift-position">Position</label>
+        <input id="shift-position" type="number" value=0 min=0>
+    </div>
+    <div>
+        <h2>Rotate</h2>
+
+        <label for="rotate-ring">Ring</label>
+        <input id="rotate-ring" type="number" value=0 min=0>
+
+        <button id="rotate-left">Left</button>
+        <button id="rotate-right">Right</button>
+    </div>
+    <div>
+        <h2>Shuffle</h2>
+        <button id="shuffle">Shuffle</button>
+    </div>
+</body>
+</html>
